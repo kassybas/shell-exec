@@ -8,9 +8,11 @@ import (
 
 func main() {
 	opts := exec.Options{
-		Silent:       false, // output to stdout and stderr
-		IgnoreResult: false, // return stdout, stderr and status code
-		ShieldEnv:    false, // expose the current process' environment variables for the shell process
+		Silent:          false,       // output to stdout and stderr
+		IgnoreResult:    false,       // return stdout, stderr and status code
+		ShieldEnv:       false,       // expose the current process' environment variables for the shell process
+		ShellPath:       "/bin/bash", // shell to be executed (default: sh)
+		ShellExtraFlags: []string{"--posix"},
 	}
 
 	script := `
@@ -18,7 +20,11 @@ func main() {
 		echo hi >&2
 		exit 11
 	`
-	so, se, src, _ := exec.ShellExec(script, []string{"FOO=world"}, opts)
+	envVars := []string{
+		"FOO=world",
+	}
+
+	so, se, src, _ := exec.ShellExec(script, envVars, opts)
 	fmt.Println("--RESULT:")
 	fmt.Println("OUT:", so)
 	fmt.Println("ERR:", se)
