@@ -8,10 +8,9 @@ import (
 
 func main() {
 	opts := exec.Options{
-		Silent:       false,       // output to stdout and stderr
-		IgnoreResult: false,       // return stdout, stderr and status code
-		ShieldEnv:    false,       // expose the current process' environment variables for the shell process
-		ShellPath:    "/bin/bash", // path of the shell to be executed
+		Silent:       false, // output to stdout and stderr
+		IgnoreResult: false, // return stdout, stderr and status code
+		ShieldEnv:    false, // expose the current process' environment variables for the shell process
 	}
 
 	script := `

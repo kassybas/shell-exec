@@ -14,12 +14,13 @@ type Options struct {
 	ShieldEnv    bool // do not expose the current process' environment variables (ignore wath is in os.Environ())
 
 	// ShellExec invocation scheme: "ShellPath ShellExtraFlags ShellCmdFlag Script"
-	ShellPath       string   // path of the shell to be executed (eg. /bin/bash)
+	ShellPath       string   // path of the shell to be executed (defaults to sh)
 	ShellCmdFlag    string   // flag that precedes the script string (default '-c')
 	ShellExtraFlags []string // list of flags for the invocation of the shell (eg. --posix for bash)
 }
 
 const DefaultShellCmdFlag = "-c"
+const DefaultShell = "sh"
 
 func ShellExec(script string, envVars []string, opts Options) (resOut, resErr string, resRc int, err error) {
 	cmdOptions := cmd.Options{
@@ -28,6 +29,9 @@ func ShellExec(script string, envVars []string, opts Options) (resOut, resErr st
 	}
 
 	// Create Cmd with options
+	if opts.ShellPath == "" {
+		opts.ShellPath = DefaultShell
+	}
 	scriptCmd := cmd.NewCmdOptions(cmdOptions, opts.ShellPath)
 	if opts.ShellExtraFlags != nil {
 		scriptCmd.Args = append(scriptCmd.Args, opts.ShellExtraFlags...)
